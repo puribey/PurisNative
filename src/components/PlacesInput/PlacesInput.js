@@ -22,11 +22,11 @@ class PlacesInput extends Component {
       <TextInput
         style={styles.placeInput}
         value={this.state.placeName}
-        placeholder="Este es un input"
+        placeholder="Nombre de ciudad"
         onChangeText={this.changePlaceName}
       />
       <Button
-        title="Add"
+        title="Agregar"
         style={styles.placeButton}
         onPress={this.placesSubmitHandler}
       />

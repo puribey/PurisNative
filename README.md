@@ -12,8 +12,6 @@ Once created, add this scripts to **package.json**:
 }
 ```
 
-----
-
 ## Android
 **Simulator:**
 * Download [Android Studio](https://developer.android.com/studio/)  
@@ -26,7 +24,8 @@ Once created, add this scripts to **package.json**:
 * Be sure USB debug is on
 * Open project on the editor and run **npm run android** 
 * Shake device to get menu
----
+
+
 ## iOS
 **Simulator:**
 * Download [Xcode](https://developer.apple.com/xcode/)  
@@ -39,7 +38,6 @@ Once created, add this scripts to **package.json**:
 * Open project on the editor and run **npm run android** 
 * Shake device to get menu
 
----
 
 ## Styles
 
@@ -82,3 +80,50 @@ const ListItem = props => (
   </TouchableWithoutFeedback>
 )
 ```
+As we don't have pseudo classes here as in HTML, RN provides us with different components that will manage some visual tricks for us:  
+* TouchableHighlight
+* TouchableOpacity
+* TouchableNativeFeedback (IMPORTANT! Only use in Android)
+
+## Scroll
+Not all RN element have the ability to scroll, that's why we can replace View with **ScrollView**. But this is not the best option for performance because it renders everything at once.  
+```
+const PlacesList = props => {
+  return (
+    <ScrollView style={styles.placesListContainer}>
+      {props.places.map((place, i) => (
+        <ListItem key={i} placeName={place} onItemPressed={() => props.onItemDeleted(i)}/>
+      ))}
+    </ScrollView>
+  )
+}
+```
+A better way of doing this is by using **FlatList**. This RN component loads the elements only when they are rendered by the view. FlatList integrates data and render inside so map method is not used anymore and key is now used anymore either.
+```
+const PlacesList = props => {
+  return (
+    <FlatList
+      style={styles.placesListContainer}
+      data={props.places}
+      renderItem={(info) => (
+        <ListItem
+          placeName={info.item.value}
+          onItemPressed={() => props.onItemDeleted(info.item.key)}
+        />
+      )}
+    />
+  )
+}
+```
+As key is now used anymore in the component it is necessary to pass a key element inside of the data object. Yes, is has to be an object.
+```
+onSubmitPlace = placeName => {
+  this.setState(prevState => {
+    return {
+      places: prevState.places.concat({key: Math.random(), value: placeName})
+    }
+  })
+}
+```
+
+

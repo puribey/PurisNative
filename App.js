@@ -24,15 +24,26 @@ export default class App extends Component<Props> {
   onSubmitPlace = placeName => {
     this.setState(prevState => {
       return {
-        places: prevState.places.concat(placeName)
+        places: prevState.places.concat({key: Math.random(), value: placeName})
       }
     })
   }
+
+  onItemDeleted = key => {
+    this.setState(prevState => {
+      return {
+        places: prevState.places.filter(place => {
+          return place.key !== key
+        })
+      }
+    })
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <PlacesInput onSubmitPlace={this.onSubmitPlace} />
-        <PlacesList places={this.state.places}/>
+        <PlacesList places={this.state.places} onItemDeleted={this.onItemDeleted}/>
       </View>
     )
   }
