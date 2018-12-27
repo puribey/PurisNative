@@ -1,0 +1,3 @@
+rootProject.name = 'purisNative'
+
+include ':app'
