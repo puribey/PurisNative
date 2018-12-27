@@ -24,7 +24,13 @@ export default class App extends Component<Props> {
   onSubmitPlace = placeName => {
     this.setState(prevState => {
       return {
-        places: prevState.places.concat({key: Math.random(), value: placeName})
+        places: prevState.places.concat({
+          key: Math.random(),
+          name: placeName,
+          img: {
+            uri: 'https://media.cntraveller.in/wp-content/uploads/2018/09/Tokyo-Shibuya-neon-lights-1366x768.jpg'
+          }
+        })
       }
     })
   }
@@ -43,7 +49,10 @@ export default class App extends Component<Props> {
     return (
       <View style={styles.container}>
         <PlacesInput onSubmitPlace={this.onSubmitPlace} />
-        <PlacesList places={this.state.places} onItemDeleted={this.onItemDeleted}/>
+        <PlacesList
+          places={this.state.places}
+          onItemDeleted={this.onItemDeleted}
+        />
       </View>
     )
   }

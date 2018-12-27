@@ -125,5 +125,44 @@ onSubmitPlace = placeName => {
   })
 }
 ```
+## Images
+* **Static**: This images are the ones that we download and place in assets folder. We need to import this images in order to use them. 
+```
+import placeImage from './src/assets/tokyo.jpg'
+```
+```
+onSubmitPlace = placeName => {
+  this.setState(prevState => {
+    return {
+      places: prevState.places.concat({
+        key: Math.random(),
+        name: placeName,
+        img: placeImage
+      })
+    }
+  })
+}
+```
+With static images the RN component **Image** works like this:
+```
+<Image style={styles.placeImage} source={props.placeImage}/>
+```
+* **From Web**: the image property needs to be an object with the property **uri** in order to work.
+```
+onSubmitPlace = placeName => {
+  this.setState(prevState => {
+    return {
+      places: prevState.places.concat({
+        key: Math.random(),
+        name: placeName,
+        img: {
+          uri: 'https://media.cntraveller.in/wp-content/uploads/2018/09/Tokyo-Shibuya-neon-lights-1366x768.jpg'
+        }
+      })
+    }
+  })
+}
+```
+
 
 
