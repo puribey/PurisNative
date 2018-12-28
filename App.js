@@ -3,6 +3,7 @@ import { Platform, StyleSheet, Text, View } from 'react-native'
 
 import PlacesInput from './src/components/PlacesInput/PlacesInput'
 import PlacesList from './src/components/PlacesList/PlacesList'
+import PlaceDetail from './src/components/PlaceDetail/PlaceDetail'
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -14,7 +15,9 @@ const instructions = Platform.select({
 type Props = {}
 export default class App extends Component<Props> {
   state = {
-    places: []
+    places: [],
+    selectedPlace: null,
+    modalStatus: false
   }
   changePlaceName = e => {
     this.setState({
@@ -35,23 +38,41 @@ export default class App extends Component<Props> {
     })
   }
 
-  onItemDeleted = key => {
+  onItemSelected = key => {
     this.setState(prevState => {
       return {
-        places: prevState.places.filter(place => {
-          return place.key !== key
+        selectedPlace: prevState.places.filter(place => {
+          return place.key === key
+        }),
+        modalStatus: true
+      }
+    })
+  }
+
+  onItemDeleted = () => {
+    this.setState(prevState => {
+      return {
+        selectedPlace: prevState.places.filter(place => {
+          return place.key === prevState.selectedPlace.key
         })
       }
+    })
+  }
+
+  onModalClosed = () => {
+    this.setState({
+      modalStatus: !this.state.modalStatus
     })
   }
 
   render() {
     return (
       <View style={styles.container}>
+        <PlaceDetail selectedPlace={this.state.selectedPlace} onItemDeleted={this.onItemDeleted} onModalClosed={this.onModalClosed} modalStatus={this.state.modalStatus}/>
         <PlacesInput onSubmitPlace={this.onSubmitPlace} />
         <PlacesList
           places={this.state.places}
-          onItemDeleted={this.onItemDeleted}
+          onItemSelected={this.onItemSelected}
         />
       </View>
     )
